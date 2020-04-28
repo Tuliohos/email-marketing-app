@@ -2,6 +2,8 @@ import React from 'react'
 import Card from '../components/card'
 import FormGroup from '../components/form-group'
 import {withRouter} from 'react-router-dom'
+import * as messages from '../components/toastr'
+import EmpresaService from '../services/empresaService'
 
 class CadastroEmpresa extends React.Component{
 
@@ -14,9 +16,39 @@ class CadastroEmpresa extends React.Component{
         senha: '',
         senhaConfirmacao: ''
     }
+    
+    constructor(){
+        super();
+        this.service = new EmpresaService();
+    }
 
     cadastrar = () => {
-        console.log(this.state);
+
+        const {razaoSocial, cnpj, ramo, email, emailConfirmacao, senha, senhaConfirmacao } = this.state;
+        const state = { razaoSocial, cnpj, ramo, email, emailConfirmacao, password: senha, senha, senhaConfirmacao };
+
+        try{
+            this.service.validar(state)
+        }catch(erro){
+            const msgs = erro.mensagens;
+            msgs.forEach(msg => messages.mensagemErro(msg));
+            return false;
+        }
+
+        const empresa = new FormData();
+        empresa.set('email', state.email);
+        empresa.set('password', state.senha);
+        empresa.set('cnpj', state.cnpj);
+        empresa.set('ramo', state.ramo);
+
+        this.service.cadastrar(empresa)
+            .then(response => {
+                messages.mensagemSucesso('Empresa cadastrada com sucesso! Faça o login para acessar o sistema')
+                this.props.history.push('/login');
+            }).catch(error =>{
+                messages.mensagemErro(error.response.data);
+            });
+
     }
 
     cancelar = () => {

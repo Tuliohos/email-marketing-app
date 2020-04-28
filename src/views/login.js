@@ -2,6 +2,8 @@ import React from 'react'
 import Card from '../components/card'
 import FormGroup from '../components/form-group'
 import {withRouter} from 'react-router-dom'
+import { mensagemErro } from '../components/toastr'
+import EmpresaService from '../services/empresaService'
 
 class Login extends React.Component{
 
@@ -9,10 +11,23 @@ class Login extends React.Component{
         email: '',
         senha: ''
     }
+
+    constructor(){
+        super();
+        this.service = new EmpresaService();
+    }
     
-    entrar = () => {
-        console.log('Email:', this.state.email)
-        console.log('Senha:', this.state.senha)
+    entrar = async () => {
+        const credenciais = new FormData();
+        credenciais.set('email', this.state.email);
+        credenciais.set('password', this.state.senha);
+
+        this.service.autenticar(credenciais).then(response => {
+            localStorage.setItem('_usuario_logado', JSON.stringify(response.data));
+            this.props.history.push('/cadastro-empresa')
+        }).catch(erro => {
+            mensagemErro(erro.message)
+        })
     }
 
     prepareCadastrar = () => {
