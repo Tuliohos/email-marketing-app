@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+const baseURL = 'https://projeto-sd-api.herokuapp.com/';
+
 const httpClient = axios.create({
-    baseURL: "https://projeto-sd-api.herokuapp.com/",
+    baseURL: baseURL,
     headers: {'Content-Type': 'multipart/form-data' }
 })
 
@@ -22,9 +24,10 @@ class ApiService{
         return httpClient.delete(requestUrl);
     }
 
-    get(url){
-        const requestUrl = `${url}`
-        return httpClient.get(requestUrl)
+    get(url, token){
+        return axios.get(`${baseURL}${url}`, {
+            headers: {'x-token': token}
+        })
     }
 }
 

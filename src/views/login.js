@@ -23,10 +23,10 @@ class Login extends React.Component{
         credenciais.set('password', this.state.senha);
 
         this.service.autenticar(credenciais).then(response => {
-            localStorage.setItem('_usuario_logado', JSON.stringify(response.data));
-            this.props.history.push('/cadastro-empresa')
+            localStorage.setItem('_xtoken', JSON.stringify(response.data['x-token']));
+            this.props.history.push('/clientes')
         }).catch(erro => {
-            mensagemErro(erro.message)
+            mensagemErro("Usuário ou senha incorretos.")
         })
     }
 
