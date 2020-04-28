@@ -12,7 +12,7 @@ class ApiService{
         return httpClient.post(requestUrl, objeto);
     }
 
-    postWithToken(url, token, objeto){
+    postWithToken(url, objeto, token){
         const requestUrl = `${url}`
         return httpClient.post(requestUrl, objeto, {
             headers: {'x-token': token}

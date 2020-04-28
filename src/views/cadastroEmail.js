@@ -7,8 +7,8 @@ import ClienteService from '../services/clienteService'
 import * as messages from '../components/toastr'
 import Card from '../components/card'
 import FormGroup from '../components/form-group'
-import SelectMenu from '../components/select-menu'
-import InputTextarea from 'primereact/inputtextarea'
+import {InputTextarea} from 'primereact/inputtextarea'
+import {MultiSelect} from 'primereact/multiselect'
 
 class CadastroEmail extends React.Component{
 
@@ -17,7 +17,8 @@ class CadastroEmail extends React.Component{
         campanha: '',
         assunto: '',
         conteudoEmail: '',
-        opcoesClientes: [] 
+        opcoesClientes: [],
+        token: ''
     }
 
     constructor(){
@@ -26,21 +27,9 @@ class CadastroEmail extends React.Component{
         this.clienteService = new ClienteService();
     }
 
-    componentDidMount(){
-
-        const token = JSON.parse(localStorage.getItem('_xtoken'));
-
-        this.clienteService.buscar(token)
-            .then(response => {
-                this.setState({opcoesClientes: this.service.obterListaClientes(response.data['data']), token: token});
-            }).catch( error => {
-                messages.mensagemErro("Não foi possível carregar a listagem de clientes.")
-            })
-    }
-
     cadastrar = () => {
-        const {nome, email, emailConfirmacao, informacoes} = this.state;
-        const state = { nome, email, emailConfirmacao, informacoes };
+        const {clientes, campanha, assunto, conteudoEmail, opcoesClientes} = this.state;
+        const state = { clientes, campanha, assunto, conteudoEmail, opcoesClientes };
 
         try{
             this.service.validar(state)
@@ -68,22 +57,37 @@ class CadastroEmail extends React.Component{
     }
 
     render(){
+
+        const token = JSON.parse(localStorage.getItem('_xtoken'));
+
+        this.clienteService.buscar(token)
+            .then(response => {
+                const opcoes = this.service.obterListaClientes(response.data['data']);
+                this.setState({opcoesClientes: opcoes, token: token});
+            }).catch( error => {
+                messages.mensagemErro("Não foi possível carregar a listagem de clientes.")
+            });
         
         return(
             <Card title='Cadastro de E-mail'>
-            <div className="row">
-                <div className="col-lg-12">
-                    <div className="bs-component">
 
-                    <FormGroup label="Clientes: " htmlFor="inputClientes">
-                            <SelectMenu id="inputClientes"
-                                lista={this.state.opcoesClientes} 
+                <div className="row">
+                    <div className="col-md-3">
+
+                        <FormGroup label="Clientes: " htmlFor="inputClientes">
+                            <MultiSelect value={this.state.clientes} 
+                                id="inputClientes"
                                 className="form-control"
-                                name="clientes"
-                                value={this.state.clientes}
-                                onChange={e => this.setState({clientes: e.target.value})}/>
+                                options={this.state.opcoesClientes}
+                                onChange={(e) => this.setState({clientes: e.value})} />
                         </FormGroup>
 
+                    </div>
+                </div>
+
+                <div className="row">
+
+                    <div className="col-md-6">
                         <FormGroup label="Campanha: *" htmlFor="inputCampanha">
                             <input type="text"
                                 id="inputCampanha"
@@ -91,7 +95,9 @@ class CadastroEmail extends React.Component{
                                 name="campanha"
                                 onChange={e => this.setState({campanha: e.target.value})}/>
                         </FormGroup>
+                    </div>
 
+                    <div className="col-md-6">
                         <FormGroup label= "Assunto: *" htmlFor="inputAssunto">
                             <input type="text"
                                 id="inputAssunto"
@@ -99,21 +105,25 @@ class CadastroEmail extends React.Component{
                                 name="assunto"
                                 onChange={e => this.setState({assunto: e.target.value})}/>
                         </FormGroup>
+                    </div>
+                </div>
 
+                <div className="row">
+                    <div className="col-md-6">
                         <FormGroup label= "Conteúdo do e-mail: *" htmlFor="inputConteudoEmail">
                             <InputTextarea 
                                 rows={10}
-                                cols={80} 
+                                cols={70} 
                                 id="inputConteudoEmail"
                                 value={this.state.conteudoEmail} 
                                 onChange={(e) => this.setState({conteudoEmail: e.target.value})} />
-                        </FormGroup>s
-
-                        <button type="button" className="btn btn-success" onClick={this.cadastrar}>Salvar</button>
-                        <button onClick={this.cancelar} type="button" className="btn btn-danger">Cancelar</button>
+                        </FormGroup>
                     </div>
                 </div>
-            </div>
+
+                <button type="button" className="btn btn-success" onClick={this.cadastrar}>Salvar</button>
+                <button onClick={this.cancelar} type="button" className="btn btn-danger">Cancelar</button>
+
             </Card>
         )
     }

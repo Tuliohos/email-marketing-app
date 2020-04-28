@@ -18,18 +18,6 @@ class ListagemClientes extends React.Component {
         
     }
 
-    componentDidMount(){
-
-        const token = JSON.parse(localStorage.getItem('_xtoken'));
-
-        this.service.buscar(token)
-            .then(response => {
-                this.setState({clientes: response.data['data']});
-            }).catch( error => {
-                mensagemErro("Não foi possível carregar a listagem de clientes.")
-            })
-    }
-
     cadastroCliente = () => {
         this.props.history.push('/cadastro-cliente')
     }
@@ -39,6 +27,15 @@ class ListagemClientes extends React.Component {
     }
 
     render(){
+
+        const token = JSON.parse(localStorage.getItem('_xtoken'));
+
+        this.service.buscar(token)
+            .then(response => {
+                this.setState({clientes: response.data['data']});
+            }).catch( error => {
+                mensagemErro("Não foi possível carregar a listagem de clientes.")
+            })
 
         return(
             <Card title="Clientes">

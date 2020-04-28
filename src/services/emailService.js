@@ -15,16 +15,16 @@ class EmailService extends ApiService {
             erros.push('Selecione ao menos um cliente na listagem');
         }
 
-        if(!email.nome){
-            erros.push('O campo Nome da Campanha é obrigatório.');
+        if(!email.campanha){
+            erros.push('O campo Campanha é obrigatório.');
         }
 
         if(!email.assunto){
-            erros.push('O campo Nome da Campanha é obrigatório.');
+            erros.push('O campo Assunto é obrigatório.');
         }
 
-        if(!email.corpoEmail){
-            erros.push('O campo Nome da Campanha é obrigatório.');
+        if(!email.conteudoEmail){
+            erros.push('O campo Conteúdo do e-mail é obrigatório.');
         }
 
         if(erros && erros.length > 0){
@@ -33,8 +33,7 @@ class EmailService extends ApiService {
     }
 
     obterListaClientes(responseData){
-        let listaClientes= [];
-
+        let listaClientes = [];
         responseData.forEach(element => {
             listaClientes.push({label: element.name, value: element});
         });
