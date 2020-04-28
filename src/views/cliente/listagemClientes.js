@@ -2,10 +2,9 @@ import React from 'react'
 import ClienteService from '../../services/clienteService'
 import {mensagemErro} from '../../components/toastr'
 import Card from '../../components/card'
-
+import {withRouter} from 'react-router-dom'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-//import PrimereactStyle from '@bit/primefaces.primereact.internal.stylelinks';
 
 class ListagemClientes extends React.Component {
 
@@ -32,17 +31,27 @@ class ListagemClientes extends React.Component {
     }
 
     preparaFormularioCadastro = () => {
-        this.props.history.push('/cadastro-lancamentos')
+        this.props.history.push('/cadastro-cliente')
     }
 
     render(){
 
         return(
             <Card title="Clientes">
+                <div className="row b-3">
+                    <div className="col-md-12">
+                        <button type="button" 
+                            className="btn btn-success float-right"
+                            onClick={this.preparaFormularioCadastro}>
+                            <i className="pi pi-users"></i>
+                            Cadastrar Cliente
+                        </button>
+                    </div>
+                </div>
+               
                 <div className="row">
                     <div className="col-md-12">
                         <div className="bs-component">
-                        
                             <DataTable value={this.state.clientes}>
                                 <Column field='email' header='E-mail' />
                                 <Column field='name' header='Nome' />
@@ -55,4 +64,4 @@ class ListagemClientes extends React.Component {
     }
 }
 
-export default ListagemClientes
+export default withRouter (ListagemClientes)
