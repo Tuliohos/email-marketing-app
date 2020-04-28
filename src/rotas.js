@@ -4,6 +4,7 @@ import Login from './views/login'
 import CadastroEmpresa from './views/cadastroEmpresa'
 import ListagemClientes from './views/cliente/listagemClientes'
 import CadastroCliente from './views/cliente/cadastroCliente'
+import CadastroEmail from './views/cadastroEmail'
 
 import { Route, Switch, HashRouter, Redirect } from 'react-router-dom'
 
@@ -16,6 +17,7 @@ function Rotas(){
                 <Route path="/cadastro-empresa" component={CadastroEmpresa}/>
                 <Route path="/clientes" component={ListagemClientes}/>
                 <Route path="/cadastro-cliente" component={CadastroCliente}/>
+                <Route path="/cadastro-email" component={CadastroEmail}/>
             </Switch>
         </HashRouter>
     )

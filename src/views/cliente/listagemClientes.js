@@ -26,12 +26,16 @@ class ListagemClientes extends React.Component {
             .then(response => {
                 this.setState({clientes: response.data['data']});
             }).catch( error => {
-                mensagemErro("Não foi possível carregar sua listagem de clientes.")
+                mensagemErro("Não foi possível carregar a listagem de clientes.")
             })
     }
 
-    preparaFormularioCadastro = () => {
+    cadastroCliente = () => {
         this.props.history.push('/cadastro-cliente')
+    }
+
+    cadastroEmail = () => {
+        this.props.history.push('/cadastro-email')
     }
 
     render(){
@@ -42,9 +46,16 @@ class ListagemClientes extends React.Component {
                     <div className="col-md-12">
                         <button type="button" 
                             className="btn btn-success float-right"
-                            onClick={this.preparaFormularioCadastro}>
+                            onClick={this.cadastroCliente}>
                             <i className="pi pi-users"></i>
                             Cadastrar Cliente
+                        </button>
+
+                        <button type="button" 
+                            className="btn btn-primary float-right"
+                            onClick={this.cadastroEmail}>
+                            <i className="pi pi-paperclip"></i>
+                            Cadastrar E-mail
                         </button>
                     </div>
                 </div>

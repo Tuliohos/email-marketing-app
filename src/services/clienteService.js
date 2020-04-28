@@ -4,11 +4,11 @@ import ErroValidacao from '../exception/erroValidacao'
 class ClienteService extends ApiService {
 
     buscar(token){
-        return this.get('/client', token);
+        return this.getWithToken('/client', token);
     }
 
     cadastrar(cliente, token){
-        return this.post('/client', cliente, token);
+        return this.postWithToken('/client', cliente, token);
     }
 
     validar(cliente){

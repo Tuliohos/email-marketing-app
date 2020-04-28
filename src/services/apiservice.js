@@ -12,7 +12,7 @@ class ApiService{
         return httpClient.post(requestUrl, objeto);
     }
 
-    post(url, token, objeto){
+    postWithToken(url, token, objeto){
         const requestUrl = `${url}`
         return httpClient.post(requestUrl, objeto, {
             headers: {'x-token': token}
@@ -29,7 +29,12 @@ class ApiService{
         return httpClient.delete(requestUrl);
     }
 
-    get(url, token){
+    get(url){
+        const requestUrl = `${url}`
+        return httpClient.get(requestUrl);
+    }
+
+    getWithToken(url, token){
         const requestUrl = `${url}`
         return httpClient.get(requestUrl, {
             headers: {'x-token': token}
